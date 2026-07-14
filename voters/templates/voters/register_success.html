@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Registration Successful — EVS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Registration Successful</h1>
+
+    <p><strong>Name:</strong> {{ voter.full_name }}</p>
+    <p><strong>Your Voter ID:</strong> {{ voter.voter_id }}</p>
+    <p><strong>Status:</strong> {{ voter.eligibility_status }}</p>
+
+    {% if voter.eligibility_status == "Eligible" %}
+        <p>You can vote now. <a href="{% url 'voting:voting_login' %}" class="btn">Go to Voting</a></p>
+    {% else %}
+        <p>You are not eligible to vote yet. Keep this Voter ID safe — you can use it once you turn 18.</p>
+    {% endif %}
+</div>
+{% endblock %}

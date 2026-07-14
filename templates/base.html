@@ -35,11 +35,19 @@
         <!-- Each page's content goes here -->
         {% endblock %}
     </main>
+    <!-- Shared error modal — any app can trigger this via showErrorModal() -->
+    <div id="error-modal-backdrop" class="modal-backdrop" style="display:none;">
+        <div class="modal-box">
+            <h3 class="modal-box__title">Please fix the following</h3>
+            <ul id="error-modal-list" class="modal-box__list"></ul>
+            <button id="error-modal-close" class="btn">OK</button>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p>Electronic Voting System — Class Governorship Election Demo</p>
     </footer>
-
+    <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

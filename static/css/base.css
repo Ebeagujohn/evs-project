@@ -127,3 +127,35 @@ table.results th { background: var(--navy); color: #fff; }
     font-size: 0.85rem;
     padding: 20px;
 }
+
+/* Error modal */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+.modal-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px 28px;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.modal-box__title {
+    margin: 0 0 12px;
+    color: var(--error);
+}
+.modal-box__list {
+    margin: 0 0 18px;
+    padding-left: 20px;
+}
+.modal-box__list li {
+    margin-bottom: 6px;
+}
