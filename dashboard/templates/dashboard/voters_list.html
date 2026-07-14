@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Voter Dashboard — EVS{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'dashboard/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Voter Dashboard</h1>
+
+<div class="summary-grid">
+    <div class="summary-card">
+        <span class="summary-card__number">{{ total_voters }}</span>
+        <span class="summary-card__label">Total Voters</span>
+    </div>
+    <div class="summary-card summary-card--good">
+        <span class="summary-card__number">{{ eligible_count }}</span>
+        <span class="summary-card__label">Eligible</span>
+    </div>
+    <div class="summary-card summary-card--warn">
+        <span class="summary-card__number">{{ not_eligible_count }}</span>
+        <span class="summary-card__label">Not Eligible Yet</span>
+    </div>
+    <div class="summary-card summary-card--info">
+        <span class="summary-card__number">{{ voted_count }}</span>
+        <span class="summary-card__label">Have Voted</span>
+    </div>
+</div>
+
+<div class="card">
+    <form method="get" class="filter-bar">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search by name or Voter ID...">
+        <select name="status">
+            <option value="" {% if not status_filter %}selected{% endif %}>All statuses</option>
+            <option value="{{ eligible_value }}" {% if status_filter == eligible_value %}selected{% endif %}>Eligible</option>
+            <option value="{{ not_eligible_value }}" {% if status_filter == not_eligible_value %}selected{% endif %}>Not Eligible Yet</option>
+        </select>
+        <button type="submit">Filter</button>
+        <a href="{% url 'dashboard:dashboard_voters_list' %}" class="btn btn--ghost">Reset</a>
+    </form>
+</div>
+
+<div class="card">
+    {% if voters %}
+    <table class="results">
+        <thead>
+            <tr>
+                <th>Voter ID</th><th>Full Name</th><th>Age</th>
+                <th>Status</th><th>Voted?</th><th>Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for voter in voters %}
+            <tr>
+                <td>{{ voter.voter_id }}</td>
+                <td>{{ voter.full_name }}</td>
+                <td>{{ voter.age }}</td>
+                <td>
+                    <span class="badge {% if voter.eligibility_status == eligible_value %}badge--good{% else %}badge--warn{% endif %}">
+                        {{ voter.eligibility_status }}
+                    </span>
+                </td>
+                <td>{% if voter.has_voted %}Yes{% else %}No{% endif %}</td>
+                <td>{{ voter.date_registered|date:"d M Y, H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p class="results-count">Showing {{ voters|length }} of {{ total_voters }} voters.</p>
+    {% else %}
+    <p>No voters match your search.</p>
+    {% endif %}
+</div>
+{% endblock %}

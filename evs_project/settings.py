@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Our three team apps
+    # Our team apps
     'voters',
     'candidates',
     'voting',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

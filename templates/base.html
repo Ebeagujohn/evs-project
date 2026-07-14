@@ -13,12 +13,23 @@
     <header class="site-header">
         <div class="site-header__inner">
             <a href="/" class="site-header__logo">EVS</a>
-            <nav class="site-nav">
-                <a href="{% url 'voters:voters_register' %}">Register</a>
-                <a href="{% url 'voting:voting_login' %}">Vote</a>
-                <a href="{% url 'voting:voting_results' %}">Results</a>
-                <a href="/admin/">Admin</a>
-            </nav>
+
+            <a href="{% url 'dashboard:dashboard_voters_list' %}" class="site-header__dashboard">
+                Voter Dashboard
+            </a>
+
+            <div class="menu-wrapper">
+                <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu" type="button">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <nav id="site-nav" class="site-nav">
+                    <a href="{% url 'voters:voters_register' %}">Register</a>
+                    <a href="{% url 'voting:voting_login' %}">Vote</a>
+                    <a href="{% url 'voting:voting_results' %}">Results</a>
+                    <a href="/admin/">Admin</a>
+                </nav>
+            </div>
         </div>
     </header>
 

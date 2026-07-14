@@ -15,4 +15,5 @@ urlpatterns = [
     path('voters/', include('voters.urls')),
     path('candidates/', include('candidates.urls')),
     path('voting/', include('voting.urls')),
+    path('dashboard/', include('dashboard.urls')),  # optional, for admin users only
 ]
