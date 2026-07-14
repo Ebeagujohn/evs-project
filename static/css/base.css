@@ -1,0 +1,129 @@
+/* ---------------------------------------------------------
+   base.css — shared styles for the whole EVS project.
+   Edit this together as a team; put page-specific styles in
+   each app's own static/<appname>/ folder instead.
+--------------------------------------------------------- */
+
+:root {
+    --navy: #1f3864;
+    --navy-light: #2e5395;
+    --bg: #f5f7fa;
+    --text: #222;
+    --border: #d9dee5;
+    --success: #1c8a4b;
+    --error: #c0392b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+    background: var(--navy);
+    color: #fff;
+}
+.site-header__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.site-header__logo {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.3rem;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+.site-nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+.site-nav a:hover { opacity: 1; text-decoration: underline; }
+
+/* Main content */
+.site-main {
+    max-width: 720px;
+    margin: 30px auto;
+    padding: 0 20px 40px;
+}
+
+/* Cards / forms */
+.card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+form input, form select {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 1rem;
+}
+button, .btn {
+    display: inline-block;
+    margin-top: 18px;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+button:hover, .btn:hover { background: var(--navy-light); }
+
+/* Messages */
+.messages { list-style: none; padding: 0; }
+.message {
+    padding: 10px 14px;
+    border-radius: 5px;
+    margin-bottom: 12px;
+}
+.message--success { background: #e3f7e9; color: var(--success); border: 1px solid var(--success); }
+.message--error { background: #fbe9e7; color: var(--error); border: 1px solid var(--error); }
+
+/* Simple results table */
+table.results {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+table.results th, table.results td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+}
+table.results th { background: var(--navy); color: #fff; }
+
+/* Footer */
+.site-footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.85rem;
+    padding: 20px;
+}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Register to Vote — EVS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Voter Registration</h1>
+    <p>TODO (Person A): build the registration form here — Full Name, Age,
+       Class/Arm — and wire it to the Voter model. On success, show the
+       generated Voter ID and eligibility status.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <!-- TODO: {{ form.as_p }} once a Django Form is built -->
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" placeholder="e.g. Amina Yusuf">
+
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" placeholder="e.g. 17">
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+{% endblock %}

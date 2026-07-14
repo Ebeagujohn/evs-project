@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Voter Login — EVS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Login to Vote</h1>
+    <p>TODO (Person C): validate the Voter ID against the Voter model —
+       handle "not found", "not eligible yet", and "already voted" cases
+       distinctly (FR4).</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="voter_id">Voter ID</label>
+        <input type="text" id="voter_id" name="voter_id" placeholder="e.g. EVS-2026-0001">
+
+        <button type="submit">Continue</button>
+    </form>
+</div>
+{% endblock %}

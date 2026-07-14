@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Cast Your Vote — EVS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Governor — Cast Your Vote</h1>
+    <p>TODO (Person C): loop over Candidate objects dynamically here (do not
+       hard-code names). On submit, create a Vote record and set
+       has_voted = True on the Voter (FR5).</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <!-- TODO: {% for candidate in candidates %} ... {% endfor %} -->
+        <label>
+            <input type="radio" name="candidate" value="1"> Example Candidate A
+        </label><br>
+        <label>
+            <input type="radio" name="candidate" value="2"> Example Candidate B
+        </label>
+
+        <button type="submit">Submit Vote</button>
+    </form>
+</div>
+{% endblock %}

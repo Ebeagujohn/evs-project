@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Electronic Voting System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a href="/" class="site-header__logo">EVS</a>
+            <nav class="site-nav">
+                <a href="{% url 'voters:voters_register' %}">Register</a>
+                <a href="{% url 'voting:voting_login' %}">Vote</a>
+                <a href="{% url 'voting:voting_results' %}">Results</a>
+                <a href="/admin/">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message message--{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        <!-- Each page's content goes here -->
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>Electronic Voting System — Class Governorship Election Demo</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
