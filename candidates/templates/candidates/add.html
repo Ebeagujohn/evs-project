@@ -1,22 +1,26 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Add Candidate — EVS Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+    .errorlist { display: none; }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="card">
     <h1>Add Candidate</h1>
-    <p>TODO (Person B): build the add-candidate form here and wire it to the
-       Candidate model. Also build the dynamic ballot template that lists
-       all registered candidates — pulled from the database, not hard-coded.</p>
 
     <form method="post">
         {% csrf_token %}
-        <label for="name">Candidate Name</label>
-        <input type="text" id="name" name="name" placeholder="e.g. Chidi Okafor">
-
-        <label for="position">Position</label>
-        <input type="text" id="position" name="position" value="Governor">
-
+        {{ form.as_p }}
         <button type="submit">Add Candidate</button>
     </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+{{ form.errors|json_script:"form-errors" }}
+<script src="{% static 'candidates/scripts.js' %}"></script>
 {% endblock %}

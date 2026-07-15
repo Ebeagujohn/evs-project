@@ -1,21 +1,52 @@
 {% extends "base.html" %}
 {% block title %}Live Results — EVS{% endblock %}
 
-{% block content %}
-<div class="card">
-    <h1>Live Results — Governor</h1>
-    <p>TODO (Person C): aggregate Vote counts per Candidate here (FR6).
-       Show total registered voters and total votes cast too.</p>
+{% block extra_css %}
+<style>
+    .stats-row { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .stat-box {
+        flex: 1; min-width: 140px; background: #fff; border: 1px solid var(--border);
+        border-radius: 8px; padding: 16px; text-align: center;
+    }
+    .stat-box__number { display: block; font-size: 1.7rem; font-weight: 700; color: var(--navy); }
+    .stat-box__label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+    .winner-row { background: #f5f8fc; font-weight: 600; }
+</style>
+{% endblock %}
 
+{% block content %}
+<h1>Live Results — Governor</h1>
+
+<div class="stats-row">
+    <div class="stat-box">
+        <span class="stat-box__number">{{ total_voters }}</span>
+        <span class="stat-box__label">Registered Voters</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-box__number">{{ total_votes_cast }}</span>
+        <span class="stat-box__label">Votes Cast</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-box__number">{{ turnout_percent }}%</span>
+        <span class="stat-box__label">Turnout</span>
+    </div>
+</div>
+
+<div class="card">
+    {% if results %}
     <table class="results">
-        <thead>
-            <tr><th>Candidate</th><th>Votes</th></tr>
-        </thead>
+        <thead><tr><th>Candidate</th><th>Votes</th></tr></thead>
         <tbody>
-            <!-- TODO: {% for row in result_rows %} ... {% endfor %} -->
-            <tr><td>Example Candidate A</td><td>0</td></tr>
-            <tr><td>Example Candidate B</td><td>0</td></tr>
+            {% for candidate in results %}
+            <tr {% if forloop.first and candidate.vote_count > 0 %}class="winner-row"{% endif %}>
+                <td>{{ candidate.name }}</td>
+                <td>{{ candidate.vote_count }}</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>No candidates have been registered yet.</p>
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Candidate Added — EVS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Candidate Added</h1>
+    <p><strong>Name:</strong> {{ candidate.name }}</p>
+    <p><strong>Position:</strong> {{ candidate.position }}</p>
+    <p>They now appear on the ballot immediately — no code changes needed.</p>
+    <a href="{% url 'candidates:candidates_add' %}" class="btn">Add Another</a>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Access Denied — EVS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Admin Access Required</h1>
+    <p>You need to be logged in as an admin to add candidates.</p>
+    <a href="/admin/login/?next={% url 'candidates:candidates_add' %}" class="btn">Log In as Admin</a>
+</div>
+{% endblock %}
