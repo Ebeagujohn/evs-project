@@ -3,7 +3,7 @@ from .models import Candidate
 
 
 class CandidateForm(forms.ModelForm):
-    """Form Admin uses to add a new candidate (FR1)."""
+    """Form Admin uses to add a new candidate"""
 
     class Meta:
         model = Candidate

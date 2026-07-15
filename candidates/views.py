@@ -22,7 +22,7 @@ def admin_required(view_func):
 
 @admin_required
 def candidates_add(request):
-    """Admin adds a new candidate (FR1). Requires staff login."""
+    """Admin adds a new candidate. Requires staff login."""
 
     if request.method == "POST":
         form = CandidateForm(request.POST)
