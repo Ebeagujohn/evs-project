@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Voting Unavailable — E-Voting{% endblock %}
+
+{% block extra_css %}
+<style>
+    .closed-box { text-align: center; padding: 20px 0; }
+    .closed-box__icon { font-size: 2.4rem; margin-bottom: 10px; }
+    .countdown { font-family: "Courier New", monospace; font-size: 1.8rem; font-weight: 700; color: var(--navy); margin: 18px 0; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card closed-box">
+    {% if status == "not_started" %}
+        <div class="closed-box__icon">⏳</div>
+        <h1>Voting Hasn't Opened Yet</h1>
+        <p>Voting opens on {{ election.start_time|date:"d M Y, H:i" }}.</p>
+        <div class="countdown" id="countdown" data-target="{{ election.start_time|date:'c' }}">--:--:--</div>
+    {% else %}
+        <div class="closed-box__icon">🔒</div>
+        <h1>Voting Has Closed</h1>
+        <p>Voting ended on {{ election.end_time|date:"d M Y, H:i" }}.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var el = document.getElementById("countdown");
+    if (el) {
+        var target = new Date(el.dataset.target).getTime();
+        function tick() {
+            var diff = target - Date.now();
+            if (diff <= 0) { el.textContent = "Voting is opening..."; location.reload(); return; }
+            var h = Math.floor(diff / 3600000);
+            var m = Math.floor((diff % 3600000) / 60000);
+            var s = Math.floor((diff % 60000) / 1000);
+            el.textContent = String(h).padStart(2,"0") + ":" + String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+        }
+        tick();
+        setInterval(tick, 1000);
+    }
+</script>
+{% endblock %}

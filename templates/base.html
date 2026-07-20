@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Electronic Voting System{% endblock %}</title>
+    <title>{% block title %}E-Voting Platform{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
@@ -12,11 +12,17 @@
 
     <header class="site-header">
         <div class="site-header__inner">
-            <a href="/" class="site-header__logo">EVS</a>
+            <a href="/" class="site-header__logo">E-VOTING</a>
 
-            <a href="{% url 'dashboard:dashboard_voters_list' %}" class="site-header__dashboard">
-                Voter Dashboard
-            </a>
+            {% if request.user.is_authenticated and request.user.is_staff %}
+                <a href="{% url 'dashboard:dashboard_voters_list' %}" class="site-header__dashboard">
+                    Dashboard
+                </a>
+            {% else %}
+                <a href="{% url 'voting:voting_login' %}" class="site-header__dashboard">
+                    Vote
+                </a>
+            {% endif %}
 
             <div class="menu-wrapper">
                 <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu" type="button">
@@ -24,10 +30,16 @@
                 </button>
 
                 <nav id="site-nav" class="site-nav">
-                    <a href="{% url 'voters:voters_register' %}">Register</a>
-                    <a href="{% url 'voting:voting_login' %}">Vote</a>
-                    <a href="{% url 'voting:voting_results' %}">Results</a>
-                    <a href="{% url 'candidates:candidates_add' %}">Admin</a>
+                    {% if request.user.is_authenticated and request.user.is_staff %}
+                        <a href="{% url 'candidates:candidates_add' %}">Add Candidate</a>
+                        <a href="{% url 'voting:voting_election_settings' %}">Election Settings</a>
+                        <a href="{% url 'dashboard:dashboard_voters_list' %}">Dashboard</a>
+                        <a href="{% url 'voting:voting_results' %}">Results</a>
+                        <a href="/admin/logout/?next=/">Log Out</a>
+                    {% else %}
+                        <a href="{% url 'voters:voters_register' %}">Register</a>
+                        <a href="{% url 'voting:voting_login' %}">Vote</a>
+                    {% endif %}
                 </nav>
             </div>
         </div>
@@ -56,7 +68,7 @@
     </div>
 
     <footer class="site-footer">
-        <p>Electronic Voting System — Class Governorship Election Demo</p>
+        <p>E-Voting Platform. Best Electronic Voting Solution. Built With Django By Amina, Mohammed and Nonso</p>
     </footer>
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}

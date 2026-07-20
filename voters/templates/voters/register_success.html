@@ -1,18 +1,140 @@
 {% extends "base.html" %}
-{% block title %}Registration Successful — EVS{% endblock %}
+{% block title %}Registration Successful — E-Voting{% endblock %}
+
+{% block extra_css %}
+<style>
+    .id-card {
+        max-width: 400px;
+        margin: 0 auto;
+        background: #ffffff;
+        color: #1a1a1a;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
+        position: relative;
+    }
+    .id-card__topbar {
+        background: linear-gradient(90deg, var(--navy) 0%, var(--navy) 55%, #1c8a4b 100%);
+        color: #fff;
+        padding: 14px 18px;
+        position: relative;
+        z-index: 2;
+    }
+    .id-card__topbar-title { font-weight: 800; letter-spacing: 1px; font-size: 0.95rem; }
+    .id-card__topbar-sub { font-size: 0.65rem; opacity: 0.85; margin-top: 2px; }
+    .id-card__watermark {
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='30' cy='30' r='24' fill='none' stroke='%231f3864' stroke-opacity='0.10' stroke-width='1.3'/%3E%3Ctext x='0' y='115' font-size='22' font-family='Georgia, serif' font-weight='bold' fill='%231f3864' fill-opacity='0.10' transform='rotate(-30 100 100)'%3EE-VOTING%3C/text%3E%3C/svg%3E");
+        background-repeat: repeat;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .id-card__body {
+        position: relative;
+        z-index: 2;
+        padding: 20px 18px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+    }
+    .id-card__photo {
+        width: 88px; height: 100px; object-fit: cover;
+        border: 2px solid var(--navy);
+        border-radius: 4px;
+        flex-shrink: 0;
+        background: #eef2f7;
+    }
+    .id-card__photo-placeholder {
+        width: 88px; height: 100px;
+        border: 2px dashed var(--border);
+        border-radius: 4px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.65rem; text-align: center; color: #888;
+        flex-shrink: 0;
+    }
+    .id-card__details { font-size: 0.82rem; line-height: 1.9; }
+    .id-card__name { font-size: 1.05rem; font-weight: 800; margin-bottom: 4px; color: var(--navy); }
+    .id-card__label {
+        display: inline-block;
+        width: 92px;
+        color: #777;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    .id-card__id { font-family: "Courier New", monospace; font-weight: 700; letter-spacing: 0.5px; }
+    .id-card__stripes {
+        position: relative;
+        z-index: 2;
+        height: 14px;
+        background: repeating-linear-gradient(
+            90deg,
+            var(--navy) 0px, var(--navy) 3px,
+            #fff 3px, #fff 6px
+        );
+    }
+    .id-card__footer {
+        position: relative;
+        z-index: 2;
+        padding: 10px 18px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.68rem;
+        color: #777;
+        background: #fafbfc;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 22px;
+        flex-wrap: wrap;
+    }
+
+    @media print {
+        .site-header, .site-footer, .action-buttons { display: none !important; }
+        body { background: #fff !important; }
+        .id-card { box-shadow: none; border: 2px solid #000; }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h1>Registration Successful</h1>
+<div class="id-card">
+    <div class="id-card__topbar">
+        <div class="id-card__topbar-title">E-VOTERS CARD</div>
+        <div class="id-card__topbar-sub">E-Voting Platform</div>
+    </div>
 
-    <p><strong>Name:</strong> {{ voter.full_name }}</p>
-    <p><strong>Your Voter ID:</strong> {{ voter.voter_id }}</p>
-    <p><strong>Status:</strong> {{ voter.eligibility_status }}</p>
+    <div class="id-card__watermark"></div>
 
-    {% if voter.eligibility_status == "Eligible" %}
-        <p>You can vote now. <a href="{% url 'voting:voting_login' %}" class="btn">Go to Voting</a></p>
-    {% else %}
-        <p>You are not eligible to vote yet. Keep this Voter ID safe — you can use it once you turn 18.</p>
-    {% endif %}
+    <div class="id-card__body">
+        {% if voter.photo %}
+            <img src="{{ voter.photo.url }}" class="id-card__photo" alt="{{ voter.full_name }}">
+        {% else %}
+            <div class="id-card__photo-placeholder">No Photo</div>
+        {% endif %}
+        <div class="id-card__details">
+            <div class="id-card__name">{{ voter.full_name }}</div>
+            <div><span class="id-card__label">Voter ID</span><span class="id-card__id">{{ voter.voter_id }}</span></div>
+            <div><span class="id-card__label">Gender</span>{{ voter.gender }}</div>
+            <div><span class="id-card__label">Age</span>{{ voter.age }}</div>
+            <div><span class="id-card__label">State</span>{{ voter.state_of_origin }}</div>
+        </div>
+    </div>
+
+    <div class="id-card__stripes"></div>
+
+    <div class="id-card__footer">
+        <span>Status: {{ voter.eligibility_status }}</span>
+        <span>Issued: {{ voter.date_registered|date:"d M Y" }}</span>
+    </div>
+</div>
+
+<div class="action-buttons">
+    <button class="btn" onclick="window.print()">Print ID Card</button>
+    <a href="{% url 'voting:voting_login' %}?voter_id={{ voter.voter_id }}" class="btn">Proceed to Vote</a>
 </div>
 {% endblock %}

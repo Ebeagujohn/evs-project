@@ -1,13 +1,15 @@
 from django.shortcuts import render
 from django.db.models import Q
+from evs_project.decorators import admin_required
 from voters.models import Voter
 
 
+@admin_required
 def dashboard_voters_list(request):
     """
     Fully functional replacement for browsing voters via /admin/.
-    Supports: search by name/voter_id, filter by eligibility status,
-    and shows live summary counts.
+    Admin-only. Supports: search by name/voter_id, filter by eligibility
+    status, and shows live summary counts.
     """
 
     voters = Voter.objects.all().order_by("-date_registered")

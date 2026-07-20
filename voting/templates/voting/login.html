@@ -1,17 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Voter Login — EVS{% endblock %}
+{% block title %}Voter Login — E-Voting{% endblock %}
 
 {% block extra_css %}
 <style>
     .errorlist { display: none; }
+    .countdown-banner { background: #eef2f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 18px; font-size: 0.85rem; color: var(--navy); text-align: center; }
+    .countdown-banner span { font-family: "Courier New", monospace; font-weight: 700; }
 </style>
 {% endblock %}
 
 {% block content %}
+{% if election %}
+<div class="countdown-banner">
+    Voting closes in <span id="closes-in" data-target="{{ election.end_time|date:'c' }}">--:--:--</span>
+</div>
+{% endif %}
+
 <div class="card">
     <h1>Login to Vote</h1>
-
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
@@ -23,4 +30,20 @@
 {% block extra_js %}
 {{ form.errors|json_script:"form-errors" }}
 <script src="{% static 'voting/scripts.js' %}"></script>
+<script>
+    var el = document.getElementById("closes-in");
+    if (el) {
+        var target = new Date(el.dataset.target).getTime();
+        function tick() {
+            var diff = target - Date.now();
+            if (diff <= 0) { el.textContent = "closed"; return; }
+            var h = Math.floor(diff / 3600000);
+            var m = Math.floor((diff % 3600000) / 60000);
+            var s = Math.floor((diff % 60000) / 1000);
+            el.textContent = String(h).padStart(2,"0") + ":" + String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+        }
+        tick();
+        setInterval(tick, 1000);
+    }
+</script>
 {% endblock %}

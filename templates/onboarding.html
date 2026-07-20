@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome — E-Voting Platform</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1f3864 0%, #163055 55%, #114a2e 100%);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .onboarding { width: 100%; max-width: 480px; padding: 40px 32px; text-align: center; position: relative; }
+        .skip-link { position: absolute; top: -10px; right: 0; color: rgba(255,255,255,0.65); font-size: 0.8rem; text-decoration: none; letter-spacing: 0.3px; }
+        .skip-link:hover { color: #fff; }
+        .slide { display: none; animation: fadeIn 0.4s ease; }
+        .slide.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .slide__icon { width: 76px; height: 76px; margin: 0 auto 26px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .slide__icon svg { width: 36px; height: 36px; stroke: #fff; }
+        .slide__title { font-size: 1.5rem; font-weight: 800; margin-bottom: 14px; letter-spacing: 0.3px; }
+        .slide__text { font-size: 0.95rem; line-height: 1.65; color: rgba(255,255,255,0.85); margin-bottom: 34px; }
+        .dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.2s ease, width 0.2s ease; }
+        .dot.active { background: #fff; width: 22px; border-radius: 4px; }
+        .next-btn { background: #fff; color: #1f3864; border: none; padding: 13px 38px; border-radius: 30px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+        .next-btn:hover { background: #eef2f7; }
+        .role-choice { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+        .role-btn { flex: 1; min-width: 160px; padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.08); color: #fff; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
+        .role-btn:hover { background: rgba(255,255,255,0.18); }
+        .role-btn small { display: block; font-weight: 400; font-size: 0.72rem; opacity: 0.75; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="onboarding">
+    <a href="#" class="skip-link" onclick="showSlide(2); return false;">Skip</a>
+
+    <div class="slide active" data-slide="0">
+        <div class="slide__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="slide__title">Secure, Transparent Voting</div>
+        <div class="slide__text">
+            E-Voting is a secure web-based platform built to facilitate electronic
+            voting processes. Cast your vote remotely while the system ensures
+            transparency, confidentiality, and integrity at every step.
+        </div>
+    </div>
+
+    <div class="slide" data-slide="1">
+        <div class="slide__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="slide__title">Everything You Need to Vote</div>
+        <div class="slide__text">
+            Voter authentication, live candidate listings, seamless vote casting,
+            and real-time result computation — all in one connected platform.
+        </div>
+    </div>
+
+    <div class="slide" data-slide="2">
+        <div class="slide__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/></svg>
+        </div>
+        <div class="slide__title">Built for Trust, Built for Everyone</div>
+        <div class="slide__text">
+            Minimizing electoral fraud, reducing logistical costs, and increasing
+            accessibility — suitable for academic institutions, organizations,
+            and small-scale elections.
+        </div>
+
+        <div class="role-choice">
+            <a href="/voters/register/" class="role-btn">
+                Continue as Voter
+                <small>Register and cast your vote</small>
+            </a>
+            <a href="/admin/login/?next=/dashboard/voters/" class="role-btn">
+                Continue as Admin
+                <small>Manage candidates &amp; results</small>
+            </a>
+        </div>
+    </div>
+
+    <div class="dots" id="dots"></div>
+    <button class="next-btn" id="next-btn" onclick="nextSlide()">Next</button>
+</div>
+
+<script>
+    const totalSlides = 3;
+    let current = 0;
+
+    const dotsEl = document.getElementById('dots');
+    for (let i = 0; i < totalSlides; i++) {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        dotsEl.appendChild(d);
+    }
+
+    function showSlide(index) {
+        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+        document.querySelector('[data-slide="' + index + '"]').classList.add('active');
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === index));
+        current = index;
+        const nextBtn = document.getElementById('next-btn');
+        nextBtn.style.display = (index === totalSlides - 1) ? 'none' : 'inline-block';
+    }
+
+    function nextSlide() {
+        if (current < totalSlides - 1) showSlide(current + 1);
+    }
+</script>
+
+</body>
+</html>

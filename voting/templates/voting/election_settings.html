@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Election Settings — E-Voting{% endblock %}
+
+{% block extra_css %}
+<style>
+    .errorlist { display: none; }
+    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 14px; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
+    .status-badge--open { background: #e3f7e9; color: var(--success); }
+    .status-badge--not_started { background: #fdf3d8; color: #b8860b; }
+    .status-badge--closed { background: #fbe9e7; color: var(--error); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Election Settings</h1>
+
+    {% if election.status == "open" %}
+        <span class="status-badge status-badge--open">Voting is currently OPEN</span>
+    {% elif election.status == "not_started" %}
+        <span class="status-badge status-badge--not_started">Voting has NOT started yet</span>
+    {% else %}
+        <span class="status-badge status-badge--closed">Voting is CLOSED</span>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Schedule</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ form.errors|json_script:"form-errors" }}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var errorsEl = document.getElementById("form-errors");
+        if (!errorsEl) return;
+        var errors = JSON.parse(errorsEl.textContent);
+        var messages = [];
+        for (var field in errors) {
+            errors[field].forEach(function (msg) { messages.push(field + ": " + msg); });
+        }
+        if (messages.length > 0) showErrorModal(messages);
+    });
+</script>
+{% endblock %}
