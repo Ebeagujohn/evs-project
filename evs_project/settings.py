@@ -12,7 +12,21 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
-from decouple import config
+
+try:
+    from decouple import config
+except ImportError:
+    def config(option, default=None, cast=None):
+        value = os.environ.get(option, default)
+        if value is None:
+            return default
+        if cast is bool:
+            return str(value).lower() in {"1", "true", "yes", "on"}
+        if cast is int:
+            return int(value)
+        if cast is float:
+            return float(value)
+        return value
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +41,15 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-k9sqv@b*2_oh6yxt$g971
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+raw_allowed_hosts = config('ALLOWED_HOSTS', default='localhost,127.0.0.1')
+if not isinstance(raw_allowed_hosts, str):
+    raw_allowed_hosts = str(raw_allowed_hosts)
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in raw_allowed_hosts.split(',')
+    if host.strip()
+]
 
 
 # Application definition
