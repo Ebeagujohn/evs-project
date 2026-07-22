@@ -80,7 +80,7 @@ def voting_cast_vote(request):
             voter.has_voted = True
             voter.save()
             del request.session["voter_pk"]
-            return redirect("voting:voting_results")
+            return redirect("voting:voting_thank_you")
     else:
         form = VoteForm()
 
