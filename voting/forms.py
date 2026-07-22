@@ -4,22 +4,36 @@ from candidates.models import Candidate
 from .models import ElectionSettings
 
 class VoterLoginForm(forms.Form):
-    """Voter ID login (FR4). Not a ModelForm — this doesn't create or edit
-    a Voter record, it just looks one up and checks three conditions."""
+    """Voter ID + email login (FR4). Requiring both makes blind guessing of
+    sequential Voter IDs impractical without a full password system.
+    Not a ModelForm — this doesn't create or edit a Voter record, it just
+    looks one up and checks eligibility."""
 
     voter_id = forms.CharField(
         label="Voter ID",
         max_length=20,
         widget=forms.TextInput(attrs={"placeholder": "e.g. EVS-2026-0001"}),
     )
+    email = forms.EmailField(
+        label="Email",
+        widget=forms.EmailInput(attrs={"placeholder": "the email you registered with"}),
+    )
 
-    def clean_voter_id(self):
-        voter_id = self.cleaned_data.get("voter_id", "").strip()
+    def clean(self):
+        cleaned_data = super().clean()
+        voter_id = cleaned_data.get("voter_id", "").strip()
+        email = cleaned_data.get("email", "").strip()
+
+        if not voter_id or not email:
+            return cleaned_data  # let the individual required-field errors show
 
         try:
-            voter = Voter.objects.get(voter_id=voter_id)
+            voter = Voter.objects.get(voter_id=voter_id, email__iexact=email)
         except Voter.DoesNotExist:
-            raise forms.ValidationError("Voter ID not found.")
+            # Deliberately generic — never reveal whether the ID or the
+            # email was the wrong part, so a wrong guess can't be used
+            # to enumerate valid Voter IDs one field at a time.
+            raise forms.ValidationError("Voter ID or email not recognized.")
 
         if voter.eligibility_status != Voter.ELIGIBLE:
             raise forms.ValidationError("You are not eligible to vote yet.")
@@ -27,8 +41,8 @@ class VoterLoginForm(forms.Form):
         if voter.has_voted:
             raise forms.ValidationError("You have already voted.")
 
-        self.voter = voter  # stash the found Voter object for the view to use
-        return voter_id
+        self.voter = voter
+        return cleaned_data
     
     
 class VoteForm(forms.Form):
