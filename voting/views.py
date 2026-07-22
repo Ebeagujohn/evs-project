@@ -40,6 +40,9 @@ def voting_logout(request):
     request.session.pop("voter_pk", None)
     return redirect("voting:voting_login")
 
+def voting_thank_you(request):
+    election = ElectionSettings.load()
+    return render(request, "voting/thank_you.html", {"election": election})
 
 def voting_cast_vote(request):
     """Cast a vote for Governor (FR5). Every failure path clears the
@@ -62,7 +65,7 @@ def voting_cast_vote(request):
 
     if voter.eligibility_status != Voter.ELIGIBLE or voter.has_voted:
         request.session.pop("voter_pk", None)
-        return redirect("voting:voting_login")
+        return redirect("voting:voting_thank_you")
 
     if request.method == "POST":
         form = VoteForm(request.POST)

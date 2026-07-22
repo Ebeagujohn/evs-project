@@ -25,12 +25,11 @@
 {% block content %}
 <div class="card">
     <h1>Cast Your Vote</h1>
-   <p>Logged in as <strong>{{ voter.full_name }}</strong> ({{ voter.voter_id }})
-&middot; <a href="{% url 'voting:voting_logout' %}" class="text-link">Not you? Log out</a>
-</p>
-</p>
+    <p>Logged in as <strong>{{ voter.full_name }}</strong> ({{ voter.voter_id }})
+    &middot; <a href="{% url 'voting:voting_logout' %}" class="text-link">Not you? Log out</a>
+    </p>
 
-    <form method="post">
+    <form method="post" id="vote-form">
         {% csrf_token %}
         <ul class="ballot-list">
             {% for radio in form.candidate %}
@@ -42,12 +41,50 @@
             </li>
             {% endfor %}
         </ul>
-        <button type="submit">Submit Vote</button>
+        <button type="button" id="open-confirm">Submit Vote</button>
     </form>
+</div>
+
+<div class="modal-backdrop" id="confirm-backdrop">
+    <div class="modal-box">
+        <h3 class="modal-box__title">Confirm your vote</h3>
+        <p id="confirm-text">Please confirm your choice before submitting. This cannot be changed afterward.</p>
+        <div style="display:flex; gap:12px; justify-content:flex-end;">
+            <button type="button" class="btn" id="cancel-confirm" style="background:#888;">Cancel</button>
+            <button type="button" class="btn" id="submit-confirm">Confirm Vote</button>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 {{ form.errors|json_script:"form-errors" }}
 <script src="{% static 'voting/scripts.js' %}"></script>
+<script>
+    var openBtn = document.getElementById("open-confirm");
+    var backdrop = document.getElementById("confirm-backdrop");
+    var cancelBtn = document.getElementById("cancel-confirm");
+    var submitBtn = document.getElementById("submit-confirm");
+    var voteForm = document.getElementById("vote-form");
+
+    openBtn.addEventListener("click", function () {
+        var selected = voteForm.querySelector('input[name="candidate"]:checked');
+        if (!selected) {
+            alert("Please select a candidate before submitting.");
+            return;
+        }
+        var label = selected.closest(".ballot-option").querySelector("span").textContent;
+        document.getElementById("confirm-text").textContent =
+            "You are voting for " + label + ". This cannot be changed afterward.";
+        backdrop.style.display = "flex";
+    });
+
+    cancelBtn.addEventListener("click", function () {
+        backdrop.style.display = "none";
+    });
+
+    submitBtn.addEventListener("click", function () {
+        voteForm.submit();
+    });
+</script>
 {% endblock %}

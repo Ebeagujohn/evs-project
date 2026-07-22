@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Vote Submitted — EVS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Thank you for voting</h1>
+    <p>Your vote has been recorded successfully.</p>
+    <p>Results will be published once voting closes
+    {% if election %}on <strong>{{ election.end_time|date:"d M Y, H:i" }}</strong>{% endif %}.
+    Please check back after that time.</p>
+</div>
+{% endblock %}

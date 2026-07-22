@@ -9,4 +9,5 @@ urlpatterns = [
     path("results/", views.voting_results, name="voting_results"),
     path("election-settings/", views.election_settings, name="voting_election_settings"),
     path("logout/", views.voting_logout, name="voting_logout"),
+    path("thank-you/", views.voting_thank_you, name="voting_thank_you"),
 ]
