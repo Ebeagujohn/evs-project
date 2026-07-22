@@ -176,6 +176,18 @@ button:hover, .btn:hover { background: var(--navy-light); }
 .message--success { background: #e3f7e9; color: var(--success); border: 1px solid var(--success); }
 .message--error { background: #fbe9e7; color: var(--error); border: 1px solid var(--error); }
 
+/* Inline text links (e.g. "Not you? Log out") */
+.text-link {
+    color: var(--navy);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    font-weight: 600;
+    transition: color 0.15s ease;
+}
+.text-link:hover {
+    color: var(--navy-light);
+}
+
 /* Simple results table */
 table.results {
     width: 100%;
